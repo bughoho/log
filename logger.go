@@ -1793,7 +1793,7 @@ func (e *Entry) NetIPPrefix(key string, pfx netip.Prefix) *Entry {
 
 // Type adds type of the key using reflection to the entry.
 func (e *Entry) Type(key string, v any) *Entry {
-	if e == nil {
+	if e == nil || (*[2]uintptr)(unsafe.Pointer(&v))[1] == 0 {
 		return nil
 	}
 
