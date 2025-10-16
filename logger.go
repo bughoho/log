@@ -1852,6 +1852,9 @@ func (e *Entry) Discard() *Entry {
 
 var notTest = true
 
+// TimeFormatUnixWithMs defines the message key that makes message fields can be customized.
+var MessageKey = "message"
+
 // Msg sends the entry with msg added as the message field if not empty.
 func (e *Entry) Msg(msg string) {
 	if e == nil {
@@ -1859,7 +1862,9 @@ func (e *Entry) Msg(msg string) {
 	}
 
 	if msg != "" {
-		e.buf = append(e.buf, ",\"message\":\""...)
+		e.buf = append(e.buf, ",\""...)
+		e.buf = append(e.buf, MessageKey...)
+		e.buf = append(e.buf, "\":\""...)
 		e.string(msg)
 		e.buf = append(e.buf, "\"}\n"...)
 	} else {
@@ -1900,7 +1905,9 @@ func (e *Entry) Msgf(format string, v ...any) {
 
 	b := bbpool.Get().(*bb)
 	b.B = b.B[:0]
-	e.buf = append(e.buf, ",\"message\":\""...)
+	e.buf = append(e.buf, ",\""...)
+	e.buf = append(e.buf, MessageKey...)
+	e.buf = append(e.buf, "\":\""...)
 	fmt.Fprintf(b, format, v...)
 	e.bytes(b.B)
 	e.buf = append(e.buf, '"')
@@ -1918,7 +1925,9 @@ func (e *Entry) Msgs(args ...any) {
 
 	b := bbpool.Get().(*bb)
 	b.B = b.B[:0]
-	e.buf = append(e.buf, ",\"message\":\""...)
+	e.buf = append(e.buf, ",\""...)
+	e.buf = append(e.buf, MessageKey...)
+	e.buf = append(e.buf, "\":\""...)
 	fmt.Fprint(b, args...)
 	e.bytes(b.B)
 	e.buf = append(e.buf, '"')
