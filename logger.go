@@ -432,7 +432,7 @@ func (l *Logger) Clone() *Logger {
 // It calls the provided function with an Entry that can be used to add fields,
 // and replaces the logger's context with the updated context.
 func (l *Logger) UpdateContext(update func(e *Entry)) {
-	if l == disabledLogger || l.Level == noLevel {
+	if l == DisabledLogger || l.Level == noLevel {
 		return
 	}
 	e := NewContext(l.Context)

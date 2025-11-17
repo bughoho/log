@@ -5,11 +5,11 @@ import (
 	"io"
 )
 
-var disabledLogger *Logger
+var DisabledLogger *Logger
 
 func init() {
 	l := Nop()
-	disabledLogger = &l
+	DisabledLogger = &l
 }
 
 // Nop returns a disabled logger for which all operation are no-op.
@@ -58,5 +58,5 @@ func Ctx(ctx context.Context) *Logger {
 	} else if l = &DefaultLogger; l != nil {
 		return l
 	}
-	return disabledLogger
+	return DisabledLogger
 }
