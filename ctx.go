@@ -2,7 +2,7 @@ package log
 
 import (
 	"context"
-	"os"
+	"io"
 )
 
 var disabledLogger *Logger
@@ -19,7 +19,7 @@ func Nop() Logger {
 		Caller:     0,
 		TimeField:  "",
 		TimeFormat: "",
-		Writer:     IOWriter{os.Stderr},
+		Writer:     IOWriter{io.Discard},
 	}
 }
 
