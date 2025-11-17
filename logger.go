@@ -419,13 +419,13 @@ func (l *Logger) SetLevel(level Level) {
 
 // Clone creates a copy of the logger with a deep copy of the Context field.
 // This ensures that modifications to the cloned logger's context do not affect the original logger.
-func (l *Logger) Clone() Logger {
+func (l *Logger) Clone() *Logger {
 	clone := *l
 	if len(l.Context) > 0 {
 		clone.Context = make([]byte, len(l.Context))
 		copy(clone.Context, l.Context)
 	}
-	return clone
+	return &clone
 }
 
 // UpdateContext updates the internal logger's context.
