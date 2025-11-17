@@ -417,6 +417,29 @@ func (l *Logger) SetLevel(level Level) {
 	atomic.StoreUint32((*uint32)(&l.Level), uint32(level))
 }
 
+// Clone creates a copy of the logger with a deep copy of the Context field.
+// This ensures that modifications to the cloned logger's context do not affect the original logger.
+func (l *Logger) Clone() Logger {
+	clone := *l
+	if len(l.Context) > 0 {
+		clone.Context = make([]byte, len(l.Context))
+		copy(clone.Context, l.Context)
+	}
+	return clone
+}
+
+// UpdateContext updates the internal logger's context.
+// It calls the provided function with an Entry that can be used to add fields,
+// and replaces the logger's context with the updated context.
+func (l *Logger) UpdateContext(update func(e *Entry)) {
+	if l == disabledLogger || l.Level == noLevel {
+		return
+	}
+	e := NewContext(l.Context)
+	update(e)
+	l.Context = e.Value()
+}
+
 // Printf sends a log entry without extra field. Arguments are handled in the manner of fmt.Printf.
 func (l *Logger) Printf(format string, v ...any) {
 	e := l.header(noLevel)
